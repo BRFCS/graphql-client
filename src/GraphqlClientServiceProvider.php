@@ -15,7 +15,7 @@ class GraphqlClientServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('graphqlClient', function($app) {
-            return new Client(config('graphqlclient.graphql_endpoint'));
+            return new Client(config('graphqlclient.graphql_endpoint'), config('graphqlclient.token'), config('graphqlclient.auth_scheme'));
         });
         
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'graphqlclient');

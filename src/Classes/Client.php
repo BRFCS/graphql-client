@@ -12,7 +12,7 @@ class Client extends Mutator {
 
     private string $query;
     public string $queryType;
-    protected string $token;
+//    protected string $token;
     public array $variables = [];
     public array $rawHeaders = [
         'Content-Type' => 'application/json',
@@ -21,7 +21,9 @@ class Client extends Mutator {
     public array $context = [];
 
     public function __construct(
-        protected string|null $endpoint
+        protected string|null $endpoint,
+        protected string|null $token = null,
+        protected string|null $authScheme = null
     )
     {
 
@@ -69,11 +71,11 @@ class Client extends Mutator {
      */
     protected function includeAuthentication()
     {
-        $auth_scheme = config('graphqlclient.auth_scheme');
+        $auth_scheme = $this->authScheme ?? config('graphqlclient.auth_scheme');
 
         // Check if is a valid authentication scheme
         if (!array_key_exists($auth_scheme, config('graphqlclient.auth_schemes')))
-            throw new Exception('Invalid Graphql Client Auth Scheme');
+            throw new Exception("Invalid Graphql Client Auth Scheme $auth_scheme");
 
         // fill Authentication header
         $authToken = isset($this->token) ? $this->token : config('graphqlclient.auth_credentials');
